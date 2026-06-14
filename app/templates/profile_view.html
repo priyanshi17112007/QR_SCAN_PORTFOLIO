@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.full_name }} | AI Digital Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 2030 Dual-Engine Design System */
+        :root {
+            --space-black: #f8fafc; /* Slate-50 Light Background */
+            --text-color: #0f172a;  /* Slate-900 Dark Text */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(15, 23, 42, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.75);
+            --aurora-opacity: 0.06;
+            --grid-opacity: 0.03;
+        }
+
+        .dark {
+            --space-black: #020617; /* Deep Space Black Background */
+            --text-color: #f1f5f9;  /* Slate-100 Light Text */
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --aurora-opacity: 0.18;
+            --grid-opacity: 0.015;
+        }
+
+        /* Smooth Variable-Driven Transitions */
+        body {
+            background-color: var(--space-black) !important;
+            color: var(--text-color) !important;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Adaptive Crystal Glassmorphism */
+        .crystal-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05),
+                        inset 0 1px 1px var(--glass-highlight);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .crystal-glass:hover {
+            border-color: rgba(6, 182, 212, 0.45);
+            box-shadow: 0 12px 40px 0 rgba(6, 182, 212, 0.12),
+                        inset 0 1px 1px var(--glass-highlight);
+        }
+
+        /* Parallax Container Settings */
+        .parallax-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Responsive Adaptive Grid Overlay */
+        .cyber-grid {
+            background-image: linear-gradient(rgba(255, 255, 255, var(--grid-opacity)) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, var(--grid-opacity)) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Dynamic Aurora Backdrops */
+        .aurora-node {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: var(--aurora-opacity);
+            mix-blend-mode: screen;
+            will-change: transform;
+            animation: move-aurora 25s infinite alternate ease-in-out;
+            transition: opacity 0.4s ease;
+        }
+        @keyframes move-aurora {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(80px, -120px) scale(1.2); }
+            66% { transform: translate(-60px, 60px) scale(0.9); }
+            100% { transform: translate(40px, -40px) scale(1.1); }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16 relative overflow-x-hidden cyber-grid">
+    
+    <!-- Floating Crystal Theme Switcher -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="profileThemeToggle" class="p-3 rounded-full crystal-glass hover:text-cyan-400 transition transform active:scale-95">
+            <i class="fas fa-sun" id="profileThemeSun"></i>
+            <i class="fas fa-moon hidden" id="profileThemeMoon"></i>
+        </button>
+    </div>
+
+    <!-- Active Aurora Color Fields -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="aurora-node w-[400px] h-[400px] bg-indigo-500 top-[-100px] left-[-100px]"></div>
+        <div class="aurora-node w-[500px] h-[500px] bg-cyan-500 bottom-[100px] right-[-100px]" style="animation-delay: -5s;"></div>
+    </div>
+
+    <div class="max-w-2xl mx-auto px-4 pt-16 relative z-10">
+        
+        <!-- Cyber Avatar Profile Block -->
+        <div class="text-center relative">
+            <div class="relative inline-block group cursor-pointer duration-500 transform hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500 via-cyan-400 to-purple-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition duration-700"></div>
+                <div class="w-36 h-36 mx-auto rounded-full bg-gradient-to-tr from-indigo-500 via-cyan-400 to-purple-500 p-[2px] shadow-2xl relative">
+                    <div class="w-full h-full rounded-full bg-slate-950 dark:bg-slate-950 bg-white overflow-hidden flex items-center justify-center">
+                        {% if profile.profile_pic_path %}
+                        <img src="{{ profile.profile_pic_path }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <i class="fas fa-user-tie text-5xl text-slate-500"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- ISSUE 1 RESOLVED: Truly Dynamic Profile Status Badge -->
+                <div class="absolute bottom-1 right-2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg border border-cyan-400/20 tracking-wider uppercase max-w-[140px] truncate">
+                    {{ profile.tagline.split('&')[0].split('|')[0].strip() if profile.tagline else 'MEMBER' }}
+                </div>
+            </div>
+
+            <h1 class="text-4xl font-extrabold tracking-tight mt-6 bg-gradient-to-r dark:from-white dark:via-slate-100 dark:to-slate-400 from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">{{ profile.full_name }}</h1>
+            <p class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400 font-bold text-sm tracking-wider uppercase mt-2">{{ profile.tagline or 'Systems Engineer' }}</p>
+            
+            <!-- Metadata Location and Degree Badges -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
+                {% if profile.college or profile.degree %}
+                <span class="px-3.5 py-1.5 rounded-full crystal-glass dark:text-slate-300 text-slate-700 flex items-center space-x-1.5">
+                    <i class="fas fa-graduation-cap text-indigo-400"></i>
+                    <span>{{ profile.degree }}{% if profile.college %} at {{ profile.college }}{% endif %}</span>
+                </span>
+                {% endif %}
+                {% if profile.location %}
+                <span class="px-3.5 py-1.5 rounded-full crystal-glass dark:text-slate-300 text-slate-700 flex items-center space-x-1.5">
+                    <i class="fas fa-location-dot text-cyan-400"></i>
+                    <span>{{ profile.location }}</span>
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Social Control Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+                {% if profile.github_url %}
+                <a href="{{ profile.github_url }}" target="_blank" class="p-3.5 crystal-glass rounded-xl hover:text-cyan-400 dark:text-slate-300 text-slate-600">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+                {% endif %}
+                {% if profile.linkedin_url %}
+                <a href="{{ profile.linkedin_url }}" target="_blank" class="p-3.5 crystal-glass rounded-xl hover:text-indigo-400 dark:text-slate-300 text-slate-600">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+                {% endif %}
+                {% if profile.portfolio_url %}
+                <a href="{{ profile.portfolio_url }}" target="_blank" class="p-3.5 crystal-glass rounded-xl hover:text-purple-400 dark:text-slate-300 text-slate-600">
+                    <i class="fas fa-globe text-xl"></i>
+                </a>
+                {% endif %}
+                {% if profile.email %}
+                <a href="mailto:{{ profile.email }}" class="p-3.5 crystal-glass rounded-xl hover:text-red-400 dark:text-slate-300 text-slate-600">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                {% endif %}
+                {% if profile.phone %}
+                <a href="tel:{{ profile.phone }}" class="p-3.5 crystal-glass rounded-xl hover:text-emerald-400 dark:text-slate-300 text-slate-600">
+                    <i class="fas fa-phone text-xl"></i>
+                </a>
+                {% endif %}
+            </div>
+
+            {% if profile.resume_path %}
+            <div class="mt-8">
+                <a href="{{ profile.resume_path }}" target="_blank" class="inline-flex items-center space-x-2 px-8 py-3.5 bg-gradient-to-r from-indigo-600 via-cyan-500 to-purple-600 hover:opacity-90 text-white font-bold text-xs rounded-xl transition duration-300 transform hover:scale-[1.03] active:scale-95 shadow-xl shadow-cyan-950/20 uppercase tracking-widest">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Download CV / Resume</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Academic Metrics Scoreboard Section -->
+        {% if profile.academic_year or profile.sgpa_percentage %}
+        <div class="grid grid-cols-2 gap-4 mt-12">
+            {% if profile.academic_year %}
+            <div class="p-5 rounded-2xl crystal-glass text-center relative overflow-hidden group">
+                <span class="dark:text-slate-400 text-slate-500 text-[10px] font-bold uppercase tracking-widest block">Academic Timeline</span>
+                <span class="text-base font-extrabold mt-2 block">{{ profile.academic_year }}</span>
+            </div>
+            {% endif %}
+            {% if profile.sgpa_percentage %}
+            <div class="p-5 rounded-2xl crystal-glass text-center relative overflow-hidden group border-r-2 border-r-cyan-400">
+                <span class="dark:text-slate-400 text-slate-500 text-[10px] font-bold uppercase tracking-widest block">Academic Score</span>
+                <span class="text-base font-extrabold text-cyan-400 mt-2 block">{{ profile.sgpa_percentage }}</span>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="mt-12 space-y-8">
+            
+            <!-- About Me / AI-Summary Block -->
+            <div class="p-6 rounded-3xl crystal-glass relative overflow-hidden">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>AI-Engineered Summary</span>
+                </h3>
+                {% if profile.ai_summary %}
+                <p class="text-sm dark:text-slate-300 text-slate-700 leading-relaxed font-light">{{ profile.ai_summary }}</p>
+                {% elif profile.about_me %}
+                <p class="text-sm dark:text-slate-300 text-slate-700 leading-relaxed font-light">{{ profile.about_me }}</p>
+                {% else %}
+                <p class="text-sm text-slate-500 italic">No summary added yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- Skills Badges Panel -->
+            {% if profile.skills %}
+            <div class="p-6 rounded-3xl crystal-glass">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-4 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                    <span>Core Stack Competencies</span>
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for skill in profile.skills.split(',') %}
+                    <span class="px-3.5 py-2 dark:bg-slate-900/40 bg-slate-100 border border-transparent dark:border-white/5 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl hover:border-cyan-400/30 hover:text-cyan-400 transition-all duration-300 cursor-default">
+                        {{ skill.strip() }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Internship Experience Timeline Display -->
+            {% if profile.internships %}
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-4 px-1 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Internship Experiences</span>
+                </h3>
+                <div class="space-y-4">
+                    {% for intern in profile.internships %}
+                    <div class="p-6 rounded-3xl crystal-glass relative overflow-hidden border-l-4 border-l-emerald-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-lg font-bold">{{ intern.role }}</h4>
+                                <p class="text-xs text-emerald-400 font-semibold mt-0.5">{{ intern.company }}</p>
+                            </div>
+                            <span class="text-[10px] font-semibold dark:text-slate-400 text-slate-500 dark:bg-slate-900/60 bg-slate-100 border border-transparent dark:border-white/5 px-3 py-1 rounded-full">{{ intern.duration }}</span>
+                        </div>
+                        {% if intern.description %}
+                        <p class="text-xs dark:text-slate-300 text-slate-700 mt-4 whitespace-pre-line leading-relaxed font-light">{{ intern.description }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Projects Display Framework -->
+            {% if profile.projects %}
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-4 px-1 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>Featured Innovations</span>
+                </h3>
+                <div class="space-y-6">
+                    {% for project in profile.projects %}
+                    <div class="p-6 rounded-3xl crystal-glass space-y-4 parallax-card group">
+                        {% if project.image_path %}
+                        <div class="w-full h-44 rounded-2xl overflow-hidden dark:bg-slate-900 bg-slate-200 border border-transparent dark:border-white/5 relative">
+                            <img src="{{ project.image_path }}" class="w-full h-full object-cover transform duration-700 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h4 class="text-lg font-bold group-hover:text-cyan-400 transition-all duration-300">{{ project.name }}</h4>
+                            <p class="text-xs dark:text-slate-400 text-slate-500 mt-2 leading-relaxed font-light">{{ project.description }}</p>
+                        </div>
+                        {% if project.tech_stack %}
+                        <div class="flex flex-wrap gap-1.5">
+                            {% for tech in project.tech_stack.split(',') %}
+                            <span class="text-[10px] px-2.5 py-1 dark:bg-slate-900/60 bg-slate-100 dark:text-slate-300 text-slate-600 rounded-lg border border-transparent dark:border-white/5">{{ tech.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="flex items-center space-x-4 pt-3 border-t dark:border-white/5 border-slate-200">
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" target="_blank" class="inline-flex items-center space-x-1.5 text-xs text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-all">
+                                <i class="fab fa-github"></i>
+                                <span>Codebase</span>
+                            </a>
+                            {% endif %}
+                            {% if project.live_url %}
+                            <a href="{{ project.live_url }}" target="_blank" class="inline-flex items-center space-x-1.5 text-xs text-cyan-400 hover:underline transition-all">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Live Demo</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Uploaded Certificates Vault -->
+            {% if profile.certificate_files %}
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-4 px-1 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                    <span>Digital Certificate Vault</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for cert in profile.certificate_files %}
+                    <div class="p-5 rounded-2xl crystal-glass flex items-center justify-between border-l-4 border-l-indigo-500 group">
+                        <div class="truncate max-w-[170px]">
+                            <h4 class="text-sm font-bold truncate group-hover:text-indigo-400 transition-all duration-300">{{ cert.title }}</h4>
+                            <p class="text-[10px] text-slate-400 mt-1 truncate">{{ cert.issuer }}</p>
+                        </div>
+                        <a href="{{ cert.file_path }}" target="_blank" class="p-2.5 rounded-xl dark:bg-slate-900/60 bg-slate-100 border border-transparent dark:border-white/5 hover:border-cyan-400/40 text-cyan-400 hover:bg-cyan-50 dark:hover:bg-slate-800 transition transform active:scale-90">
+                            <i class="fas fa-file-arrow-down text-sm animate-pulse"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Credentials Text List / Certifications -->
+            {% if profile.certifications %}
+            <div class="p-6 rounded-3xl crystal-glass">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-4 flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                    <span>Additional Credentials</span>
+                </h3>
+                <ul class="space-y-3">
+                    {% for cert in profile.certifications.split(',') %}
+                    <li class="text-xs dark:text-slate-300 text-slate-700 flex items-start space-x-2.5 font-light">
+                        <i class="fas fa-certificate text-purple-400 mt-0.5"></i>
+                        <span>{{ cert.strip() }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Interactive System Status Footer -->
+<div class="mt-16 pt-8 border-t dark:border-white/5 border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs dark:text-slate-400 text-slate-500 gap-4 relative z-20">
+    <!-- Dynamic Copyright -->
+    <p class="font-light">
+        &copy; <span id="current-year"></span> {{ profile.full_name }}. All rights reserved.
+    </p>
+    
+    <!-- Pulse Hire Indicator -->
+    <div class="flex items-center space-x-2">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="cursor-pointer hover:text-emerald-400 transition duration-300 font-medium" onclick="window.location.href='mailto:{{ profile.email }}'">
+            Available for Opportunities
+        </span>
+    </div>
+
+    <!-- Interactive Security Indicator with Tooltip -->
+    <div class="flex items-center space-x-1.5 cursor-help group relative">
+        <i class="fas fa-shield-halved text-cyan-400"></i>
+        <span class="font-light hover:text-cyan-400 transition duration-300">SSL Encrypted Connection</span>
+        <!-- Hover Tooltip Card -->
+        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-slate-900 border border-white/10 text-white text-[10px] rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-xl">
+            Secure Neon.tech Database Bridge Active
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    <!-- ISSUE 2 RESOLVED: Floating Theme Switcher & System Hook Script -->
+    <script>
+        const toggleBtn = document.getElementById('profileThemeToggle');
+        const themeSun = document.getElementById('profileThemeSun');
+        const themeMoon = document.getElementById('profileThemeMoon');
+        const htmlEl = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                htmlEl.classList.remove('dark');
+                themeSun.classList.add('hidden');
+                themeMoon.classList.remove('hidden');
+            } else {
+                htmlEl.classList.add('dark');
+                themeSun.classList.remove('hidden');
+                themeMoon.classList.add('hidden');
+            }
+        }
+
+        // Auto-match system setup or dashboard settings
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(currentTheme);
+
+        toggleBtn.addEventListener('click', () => {
+            const activeTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+            localStorage.setItem('theme', activeTheme);
+            applyTheme(activeTheme);
+        });
+
+        // Parallax depth engine
+        document.querySelectorAll('.parallax-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                
+                const rotX = (yc - y) / 14;
+                const rotY = (x - xc) / 14;
+                
+                card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+        // STEP 2 APPLIED HERE: Populate the dynamic copyright year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

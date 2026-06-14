@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Smart QR Portfolio{% endblock %}</title>
+    <!-- Tailwind CSS v3 Engine Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Global CSS Variables and Crystal Glass Engine */
+        :root {
+            --space-black: #020617;
+            --crystal-white: #ffffff;
+            --cyber-cyan: #06b6d4;
+            --ai-purple: #8b5cf6;
+            --electric-blue: #3b82f6;
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-blur: 20px;
+        }
+
+        /* Smooth Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--space-black);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--cyber-cyan);
+        }
+
+        /* 2030 Liquid Crystal Glass */
+        .crystal-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .crystal-glass:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(6, 182, 212, 0.12),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Aurora Moving Backdrop */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -10;
+            background-color: var(--space-black);
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .aurora-node {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.18;
+            mix-blend-mode: screen;
+            will-change: transform;
+            animation: move-aurora 25s infinite alternate ease-in-out;
+        }
+        @keyframes move-aurora {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(80px, -120px) scale(1.2); }
+            66% { transform: translate(-60px, 60px) scale(0.9); }
+            100% { transform: translate(40px, -40px) scale(1.1); }
+        }
+
+        /* Custom Interactive Cursor Elements */
+        #custom-cursor {
+            width: 8px;
+            height: 8px;
+            background-color: var(--cyber-cyan);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            transition: width 0.1s, height 0.1s;
+        }
+        #custom-cursor-glow {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300 relative">
+    
+    <!-- Interactive Background Particles and Aurora Grid -->
+    <div class="aurora-bg">
+        <canvas id="particles-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+        <div class="aurora-node w-[400px] h-[400px] bg-indigo-500 top-[-100px] left-[-50px]"></div>
+        <div class="aurora-node w-[500px] h-[500px] bg-cyan-500 bottom-[-150px] right-[-100px]" style="animation-delay: -5s;"></div>
+        <div class="aurora-node w-[350px] h-[350px] bg-purple-500 top-[40%] left-[60%]" style="animation-delay: -10s;"></div>
+    </div>
+
+    <!-- Theme and Controls -->
+    <div class="fixed top-4 right-4 z-50 flex items-center space-x-3">
+        <button id="themeToggle" class="p-3 rounded-full crystal-glass text-slate-100 hover:text-cyan-400 transition transform active:scale-95">
+            <i class="fas fa-sun" id="themeSun"></i>
+            <i class="fas fa-moon hidden" id="themeMoon"></i>
+        </button>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="relative z-10">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Standard Interactive Script Components -->
+    <script>
+        // Interactive Particles Engine
+        const canvas = document.getElementById('particles-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.4;
+                    this.vy = (Math.random() - 0.5) * 0.4;
+                    this.radius = Math.random() * 1.5 + 0.5;
+                    this.alpha = Math.random() * 0.5 + 0.1;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(6, 182, 212, ${this.alpha})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 60; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
+
+        // Custom Cursor Tracker
+        const cursor = document.createElement('div');
+        cursor.id = 'custom-cursor';
+        const cursorGlow = document.createElement('div');
+        cursorGlow.id = 'custom-cursor-glow';
+        document.body.appendChild(cursor);
+        document.body.appendChild(cursorGlow);
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+
+        // Interactive Theme Controls
+        const themeToggle = document.getElementById('themeToggle');
+        const themeSun = document.getElementById('themeSun');
+        const themeMoon = document.getElementById('themeMoon');
+        
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.body.classList.replace('bg-slate-950', 'bg-slate-50');
+            document.body.classList.replace('text-slate-100', 'text-slate-900');
+            themeSun.classList.add('hidden');
+            themeMoon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.add('dark');
+            themeSun.classList.remove('hidden');
+            themeMoon.classList.add('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                document.body.classList.replace('bg-slate-950', 'bg-slate-50');
+                document.body.classList.replace('text-slate-100', 'text-slate-900');
+                localStorage.setItem('theme', 'light');
+                themeSun.classList.add('hidden');
+                themeMoon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                document.body.classList.replace('bg-slate-50', 'bg-slate-950');
+                document.body.classList.replace('text-slate-900', 'text-slate-100');
+                localStorage.setItem('theme', 'dark');
+                themeSun.classList.remove('hidden');
+                themeMoon.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

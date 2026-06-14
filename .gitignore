@@ -1,0 +1,8 @@
+# Ignore sensitive configuration files
+docker-compose.yml
+.env
+
+# Ignore local database and virtual environment
+sql_app.db
+venv/
+__pycache__/
